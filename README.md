@@ -11,17 +11,3 @@ Changelog Information
 ###################
 
 28/04/2016 - The first version of project was created
-
-###################
-Requirements
-###################
-
-Android Studio
-sssssssss
-
-
-###################
-Installation
-###################
-
-Coming Soon
