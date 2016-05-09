@@ -26,7 +26,7 @@
 
         <activity
             android:name=".CENTRAL010101W"
-            android:label="Input Traceability"
+            android:label="CENTRAL"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
     </application>
