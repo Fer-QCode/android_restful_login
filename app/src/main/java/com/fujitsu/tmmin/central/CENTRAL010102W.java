@@ -3,13 +3,18 @@ package com.fujitsu.tmmin.central;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.util.Linkify;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +28,8 @@ import com.fujitsu.tmmin.central.api.CENTRAL010102WAPI;
 import com.fujitsu.tmmin.central.id.common.domain.UserSessionInfo;
 import com.google.gson.Gson;
 
+import org.w3c.dom.Text;
+
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,9 +39,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-/**
- * Created by Imam Ibnu on 23/04/2016.
- */
+
 public class CENTRAL010102W extends AppCompatActivity {
 
 
@@ -55,14 +60,28 @@ public class CENTRAL010102W extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_central010102w);
         self = this;
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.toyota_white1);
+
+        final ActionBar abar = getSupportActionBar();
+        View viewActionBar = getLayoutInflater().inflate(R.layout.custom_action, null);
+        ActionBar.LayoutParams params = new ActionBar.LayoutParams(//Center the textview in the ActionBar !
+                ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.MATCH_PARENT,
+                Gravity.CENTER);
+        abar.setCustomView(viewActionBar, params);
+        abar.setDisplayShowCustomEnabled(true);
+        abar.setDisplayShowTitleEnabled(false);
+        abar.setDisplayHomeAsUpEnabled(false);
+        abar.setHomeButtonEnabled(true);
+        //TextView textviewTitle = (TextView) viewActionBar.findViewById(R.id.actionbar_textview);
+        //getSupportActionBar().setDisplayUseLogoEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setIcon(R.drawable.toyota_red);
 
         //String define login
         edtuserid = (EditText) findViewById(R.id.editUser);
@@ -71,6 +90,9 @@ public class CENTRAL010102W extends AppCompatActivity {
         prLogin = (ProgressBar) findViewById(R.id.prLogin);
         prLogin.setVisibility(View.GONE);
         getForgot = (TextView) findViewById(R.id.textGetForgot);
+        TextView textForgot = (TextView) findViewById(R.id.textForgot);
+        textForgot.setPaintFlags(textForgot.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        //getForgot.setAutoLinkMask(Linkify.WEB_URLS);
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +110,7 @@ public class CENTRAL010102W extends AppCompatActivity {
         //Toast.makeText(CENTRAL010102W.this, "Please contact 14045", Toast.LENGTH_LONG);
         //getForgot.setText("Please contact 14045");
         //UserSessionInfo info = CENTRAL010102WAPI.Instance().validateUser(userid,md5_pass,macAddress);
-        sendMsg(CENTRAL010102WAPI.Instance().forgotPass("MCENT112203E").getContent());
+        sendMsg(CENTRAL010102WAPI.Instance().forgotPass("MCENT112224I").getContent());
     }
 
     public class DoLogin extends AsyncTask<String,String,String> {
@@ -168,8 +190,11 @@ public class CENTRAL010102W extends AppCompatActivity {
     }
 
     public void showError (String message){
-        TextView partTextView = new TextView(this);
+        TextView partTextView = (TextView)findViewById(R.id.textGetForgot);
         partTextView.setText(message);
+        //partTextView.setWidth = ;
+        //partTextView.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        //partTextView.setTextColor(Color.RED);
 
         LinearLayout sv = (LinearLayout)findViewById(R.id.messageError);
         try {
