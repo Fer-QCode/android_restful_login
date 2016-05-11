@@ -7,6 +7,7 @@ public class UserSessionInfo {
     public static final String USER_INFO  = "userInfo";
     private String userName;
     private String terminalCode;
+    private String terminalDesc;
     private String shift;
     private String roleID;
     private String content;
@@ -22,6 +23,10 @@ public class UserSessionInfo {
 
     public String getTerminalCode() {
         return terminalCode;
+    }
+
+    public String getTerminalDesc () {
+        return terminalDesc;
     }
 
     public void setTerminalCode(String terminalCode) {
