@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +39,7 @@ import java.util.Locale;
 public class CENTRAL010101W extends AppCompatActivity {
 
     public static final String DEFAULT = "N/A";
-    CENTRAL010102WAPI koneksiClass;
+    //CENTRAL010102WAPI koneksiClass;
 
     private List<String> parts = null;
     private String bodyId = null;
@@ -46,6 +47,7 @@ public class CENTRAL010101W extends AppCompatActivity {
     private int index = 0;
     private TextListener worker = null;
     private String termCd = "CCC";
+    private String termDesc = "NULL";
     private String roleID = "0";
     private String userName = "YUSUF";
 
@@ -110,18 +112,6 @@ public class CENTRAL010101W extends AppCompatActivity {
         }
     };
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -137,7 +127,13 @@ public class CENTRAL010101W extends AppCompatActivity {
         // Find the button within action-view
         //Button b = (Button) v.findViewById(R.id.btnCustomAction);
         TextView lblAction = (TextView) v.findViewById(R.id.lblAction);
-        lblAction.setText("'" + userName + "'(Shift)");
+        lblAction.setText(userName + "-" + termDesc);
+        TextView lblDate = (TextView) v.findViewById(R.id.lblDate);
+
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE, MMM dd, yyyy h:mm");
+        String dateString = sdf.format(date);
+        lblDate.setText(dateString);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -169,9 +165,10 @@ public class CENTRAL010101W extends AppCompatActivity {
         setContentView(R.layout.activity_central010101w);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //getSupportActionBar().setTitle(Html.fromHtml("<font color='#000'>CENTRAL</font>"));
 
         //bt.setOnClickListener(CENTRAL010101W);
-        koneksiClass = new CENTRAL010102WAPI();
+        //koneksiClass = new CENTRAL010102WAPI();
         //btnLogout = (Button) findViewById(R.id.btnLogout);
 
         SharedPreferences sharedPreferences = getSharedPreferences("sesi", Context.MODE_PRIVATE);
@@ -179,6 +176,7 @@ public class CENTRAL010101W extends AppCompatActivity {
         userName = info.getUserName();
         roleID = info.getRoleID();
         termCd = info.getTerminalCode();
+        termDesc = info.getTerminalDesc();
         parts = new ArrayList<String>();
 
         getBodyNo().setBackgroundColor(Color.WHITE);
@@ -353,6 +351,18 @@ public class CENTRAL010101W extends AppCompatActivity {
         this.getBodyNo().requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(this.getBodyNo(), InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setBodyColor(int color){
