@@ -83,7 +83,7 @@ public class CENTRAL010101WAPI {
     public ConfirmedResultMap confimProcess(String bodyNo, String termCd, int originalAmountPart, String roleId, String userName, List<String> parts){
         ConfirmedResultMap result = null;
         StringBuilder sbUrl = new StringBuilder(basicURL);
-        sbUrl.append("/ConfirmValidation");
+        sbUrl.append("/ConfirmPartValidation");
         sbUrl.append("?bodyNo=" + bodyNo);
         sbUrl.append("&termCd=" + termCd);
         sbUrl.append("&userName=" + userName);
