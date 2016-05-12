@@ -43,13 +43,14 @@ public class CENTRAL010101WAPI {
         return result;
     }
 
-    public Message isValidBody(String bodyNo, String termCd, String roleId){
+    public Message isValidBody(String bodyNo, String termCd, String roleId, String userID){
         Message result = null;
         StringBuilder sbUrl = new StringBuilder(basicURL);
         sbUrl.append("/BodyValidation");
         sbUrl.append("?bodyNo=" + bodyNo);
         sbUrl.append("&termCd=" + termCd);
         sbUrl.append("&roleId="+roleId);
+        sbUrl.append("&userID="+userID);
 
         try {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitNetwork().build());
@@ -86,9 +87,9 @@ public class CENTRAL010101WAPI {
         sbUrl.append("/ConfirmPartValidation");
         sbUrl.append("?bodyNo=" + bodyNo);
         sbUrl.append("&termCd=" + termCd);
-        sbUrl.append("&userName=" + userName);
-        sbUrl.append("&roleId=" + roleId);
         sbUrl.append("&originalAmountPart=" + Integer.toString(originalAmountPart));
+        sbUrl.append("&userID=" + userName);
+        sbUrl.append("&roleId=" + roleId);
         sbUrl.append(getListParameters(parts));
 
         try {

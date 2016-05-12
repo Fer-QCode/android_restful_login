@@ -11,6 +11,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +56,7 @@ public class CENTRAL010101W extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if(msg.arg1==0){
-                com.fujitsu.tmmin.central.id.common.domain.Message res = CENTRAL010101WAPI.Instance().isValidBody(getBodyNo().getText().toString(), termCd, roleID);
+                com.fujitsu.tmmin.central.id.common.domain.Message res = CENTRAL010101WAPI.Instance().isValidBody(getBodyNo().getText().toString(), termCd, roleID, userName);
                 if(res.isStatus()){
                     setAmount(res.getAmountPart());
                     if(res.getContent_cd().equals("I")){
@@ -91,6 +92,7 @@ public class CENTRAL010101W extends AppCompatActivity {
                         index = index + 1;
                         getIndex().setText(new Integer(index).toString());
                         addPart(partID);
+                        cleanMessage();
                         if(index==getAmount()){
                             getPartID().setEnabled(false);
                             getPartID().setBackgroundColor(Color.GRAY);
@@ -192,6 +194,9 @@ public class CENTRAL010101W extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+
+        getBodyNo().setOnKeyListener(new EventTxt(this));
+        getPartID().setOnKeyListener(new EventTxt(this));
     }
 
     public void addPart(String partID){
@@ -256,35 +261,8 @@ public class CENTRAL010101W extends AppCompatActivity {
 
     public void confirm(View view){
         try {
-            LinearLayout sv = (LinearLayout)findViewById(R.id.partListContent);
-            sv.removeAllViews();
-
             ConfirmedResultMap confirmedResultMap = CENTRAL010101WAPI.Instance().confimProcess(getBodyNo().getText().toString(),termCd,getAmount(),roleID,userName,parts);
-            for(SparePart body : confirmedResultMap.getResult()){
-                TextView partTextView = new TextView(this);
-                TextView messageTextView = new TextView(this);
 
-                partTextView.setText(body.getPartID());
-                partTextView.setPadding(0,0,10,10);
-                messageTextView.setText(body.getStatusName());
-
-                if(body.getStatusCD().equals("O")){
-                    partTextView.setBackgroundColor(Color.GREEN);
-                    messageTextView.setBackgroundColor(Color.GREEN);
-                }else {
-                    partTextView.setBackgroundColor(Color.RED);
-                    messageTextView.setBackgroundColor(Color.RED);
-                }
-
-                TextView spaceTextView = new TextView(this);
-
-                LinearLayout group = new LinearLayout(this);
-                group.setOrientation(LinearLayout.HORIZONTAL);
-                group.addView(partTextView, 0);
-                group.addView(spaceTextView, 1);
-                group.addView(messageTextView, 2);
-                sv.addView(group);
-            }
             showMessage(confirmedResultMap.getContent());
             getConfirmButton().setEnabled(false);
             getConfirmButton().setTextColor(Color.WHITE);
@@ -314,6 +292,10 @@ public class CENTRAL010101W extends AppCompatActivity {
         getConfirmButton().setVisibility(View.VISIBLE);
         getYesOroButtonArea().setVisibility(View.GONE);
         worker.enableWork = true;
+    }
+
+    public void enableType(View view){
+        worker.mode = TextListener.TYPE_MODE;
     }
 
     public Button getConfirmButton(){
@@ -374,45 +356,52 @@ public class CENTRAL010101W extends AppCompatActivity {
     }
 
     public class TextListener extends Thread {
+        public static final String SCAN_MODE  = "SCAN";
+        public static final String TYPE_MODE  = "TYPE";
+
         public boolean enableWork = true;
         public boolean done = false;
+        public String mode = SCAN_MODE;
         private CENTRAL010101W main;
 
         public TextListener(CENTRAL010101W main){
             this.main = main;
         }
 
+        public void process(){
+            if(main.bodyId == null){
+                String bodyNo = main.getBodyNo().getText().toString();
+                //System.out.println("isi body = "+new Boolean(bodyNo.length()>0).toString());
+                if(bodyNo!=null && bodyNo.length()>0){
+                    enableWork = false;
+                    Message msg = new Message();
+                    msg.arg1 = 0;
+                    handler.sendMessage(msg);
+                    enableWork = true;
+                }
+            }else{
+                String partID = main.getPartID().getText().toString();
+                if(partID!=null && partID.length()>0){
+                    enableWork = false;
+                    if(main.index!=this.main.amount){
+                        Message msg = new Message();
+                        msg.arg1 = 1;
+                        handler.sendMessage(msg);
+                    }else{
+                        Message msg = new Message();
+                        msg.arg1 = 2;
+                        handler.sendMessage(msg);
+                        done=true;
+                    }
+                    enableWork = true;
+                }
+            }
+        }
         public void run() {
             while (done==false) {
                 try {
-                    if(enableWork){
-                        if(main.bodyId == null){
-                            String bodyNo = main.getBodyNo().getText().toString();
-                            System.out.println("isi body = "+new Boolean(bodyNo.length()>0).toString());
-                            if(bodyNo!=null && bodyNo.length()>0){
-                                enableWork = false;
-                                Message msg = new Message();
-                                msg.arg1 = 0;
-                                handler.sendMessage(msg);
-                                enableWork = true;
-                            }
-                        }else{
-                            String partID = main.getPartID().getText().toString();
-                            if(partID!=null && partID.length()>0){
-                                enableWork = false;
-                                if(main.index!=this.main.amount){
-                                    Message msg = new Message();
-                                    msg.arg1 = 1;
-                                    handler.sendMessage(msg);
-                                }else{
-                                    Message msg = new Message();
-                                    msg.arg1 = 2;
-                                    handler.sendMessage(msg);
-                                    done=true;
-                                }
-                                enableWork = true;
-                            }
-                        }
+                    if(enableWork && mode.equals(SCAN_MODE)){
+                        process();
                     }
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
@@ -420,6 +409,27 @@ public class CENTRAL010101W extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    public class EventTxt implements View.OnKeyListener{
+        private CENTRAL010101W main;
+
+        public EventTxt(CENTRAL010101W main){
+            this.main = main;
+        }
+
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction()== KeyEvent.ACTION_DOWN){
+                main.worker.process();
+                return true;
+            }else{
+                main.showMessage(Integer.toString(keyCode));
+                return false;
+            }
+        }
+
+
     }
 
     public void reset(){
@@ -449,6 +459,7 @@ public class CENTRAL010101W extends AppCompatActivity {
 
         //recreate text listener
         worker.enableWork = true;
+        worker.mode = TextListener.SCAN_MODE;
 
         disableButton();
     }

@@ -44,7 +44,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:background="@drawable/border_style"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:onClick="enableType" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -57,7 +58,8 @@
         android:layout_alignStart="@+id/txtBodyNo"
         android:layout_alignRight="@+id/txtBodyNo"
         android:layout_alignEnd="@+id/txtBodyNo"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:onClick="enableType" />
 
     <TextView
         android:layout_width="wrap_content"
