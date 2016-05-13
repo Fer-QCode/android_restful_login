@@ -27,7 +27,7 @@ public class CENTRAL010101WAPI {
     private static CENTRAL010101WAPI instance = null;
     private HttpClient client;
     private String host = "192.168.137.1";
-    private String port = "82";
+    private String port = "83";
     private String basicURL = "http://"+host+":"+port+"/CENTRAL010101W";
     public static CENTRAL010101WAPI Instance()
     {

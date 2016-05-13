@@ -18,6 +18,7 @@
         android:text="Body No"
         android:id="@+id/lblBodyNo"
         android:textStyle="bold"
+        android:textSize="15dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -28,38 +29,38 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Part ID"
         android:id="@+id/lblPartID"
-        android:layout_alignTop="@+id/txtPartID"
-        android:layout_alignLeft="@+id/lblBodyNo"
-        android:layout_alignStart="@+id/lblBodyNo"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:textSize="15dp"
+        android:layout_below="@+id/txtBodyNo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtBodyNo"
-        android:layout_alignTop="@+id/lblBodyNo"
-        android:layout_toRightOf="@+id/lblBodyNo"
-        android:layout_marginLeft="31dp"
-        android:layout_marginStart="31dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/border_style"
-        android:textSize="20dp"
-        android:onClick="enableType" />
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:onClick="enableType"
+        android:layout_below="@+id/lblBodyNo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/linearLayout"
+        android:layout_alignEnd="@+id/linearLayout"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txtPartID"
-        android:layout_marginTop="21dp"
-        android:background="@drawable/border_style"
-        android:layout_below="@+id/txtBodyNo"
-        android:layout_alignLeft="@+id/txtBodyNo"
-        android:layout_alignStart="@+id/txtBodyNo"
-        android:layout_alignRight="@+id/txtBodyNo"
-        android:layout_alignEnd="@+id/txtBodyNo"
-        android:textSize="20dp"
-        android:onClick="enableType" />
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:onClick="enableType"
+        android:layout_below="@+id/lblPartID"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/linearLayout"
+        android:layout_alignEnd="@+id/linearLayout" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,9 +68,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0"
         android:id="@+id/txtIndex"
-        android:layout_marginRight="37dp"
-        android:layout_marginEnd="37dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginRight="59dp"
+        android:layout_marginEnd="59dp"
+        android:layout_marginTop="10dp"
         android:textStyle="bold"
         android:layout_below="@+id/txtPartID"
         android:layout_alignRight="@+id/linearLayout"
@@ -93,10 +94,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0"
         android:id="@+id/txtAmountPart"
-        android:layout_alignTop="@+id/textView"
+        android:textStyle="bold"
+        android:layout_above="@+id/linearLayout"
         android:layout_toRightOf="@+id/textView"
         android:layout_toEndOf="@+id/textView"
-        android:textStyle="bold" />
+        android:layout_marginLeft="14dp"
+        android:layout_marginStart="14dp" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -110,9 +113,9 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="126dp"
+            android:layout_height="83dp"
             android:id="@+id/scrollPart"
-            android:layout_weight="0.19" >
+            android:layout_weight="0.07">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -123,7 +126,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="73dp"
+            android:layout_height="51dp"
             android:id="@+id/scrollErrorMsg" >
 
             <LinearLayout
@@ -138,11 +141,11 @@
             android:layout_height="wrap_content"
             android:text="CONFIRM"
             android:id="@+id/btnConfirm"
-            android:layout_weight="0.21"
             android:textSize="30dp"
             android:textColor="#000000"
             android:background="#837d7d"
-            android:onClick="confirm" />
+            android:onClick="confirm"
+            android:layout_weight="0.13" />
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
